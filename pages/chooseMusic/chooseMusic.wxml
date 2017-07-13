@@ -1,0 +1,71 @@
+<import src="../../common/foot.wxml" />
+
+<view class="page">
+    <view class="page__hd">🎶选择音乐</view>
+    <view class="page__bd">
+        <view class="weui-search-bar">
+            <view class="weui-search-bar__form">
+                <view class="weui-search-bar__box">
+                    <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+
+                    <input type="text" class="weui-search-bar__input" placeholder="请输入歌曲名，歌手名" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" bindconfirm="searchMusic" />
+
+                    <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+                        <icon type="clear" size="14"></icon>
+                    </view>
+
+                </view>
+
+                <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+                    <icon class="weui-icon-search" type="search" size="14"></icon>
+
+                    <view class="weui-search-bar__text" style="font-size: 18px;">请输入歌曲名，歌手名</view>
+
+                </label>
+            </view>
+
+            <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="searchMusic">搜索</view>
+
+        </view>
+
+        <view class="weui-panel">
+            <view class="page-section">
+                <view class="weui-cells__title" style="font-size: 18px">推荐歌单</view>
+                <view class="weui-cells weui-cells_after-title" style="font-size: 18px">
+                    <view class="weui-cell weui-cell_input">
+                        <view class="weui-cell__hd">
+                            <view class="weui-label">当前选择</view>
+                        </view>
+                        <view class="weui-cell__bd">
+                            <picker bindchange="bindPickerChange" value="{{styleIndex}}" range="{{style}}">
+                                <view class="weui-input">{{style[styleIndex]}}</view>
+                            </picker>
+                        </view>
+                        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="weui-cells__title">音乐列表</view>
+        <view class="weui-cells weui-cells_after-title">
+            <radio-group bindchange="radioChange">
+                <label class="weui-cell weui-check__label" wx:for="{{musicArray}}" wx:key="{{item.id}}">
+                    <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                        <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+                        <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
+                        <radio class="weui-check" value="{{item.id}}" checked="false"/>
+                    </view>
+                    <view class="weui-cell__bd" style="text-align: right">
+                        <button bindtap="navigateBackConfirm" class="weui-btn mini-btn" type="primary" size="mini" wx:if="{{item.checked}}">确定</button>
+                        <audio poster="{{item.poster}}" name="{{item.name}}" author="{{item.authors}}" src="{{item.src}}" id="{{item.id}}" controls></audio>
+                    </view>
+                </label>
+            </radio-group>
+
+        </view>
+
+    </view>
+
+    <template is="foot"/>
+</view>

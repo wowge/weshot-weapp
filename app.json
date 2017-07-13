@@ -1,0 +1,45 @@
+{
+  "pages":[
+    "pages/home/home",
+    "pages/newAlbum/newAlbum",
+    "pages/albums/albums",
+    "pages/editPhotos/editPhotos",
+    "pages/chooseMusic/chooseMusic",
+    "pages/viewAlbum/viewAlbum",
+    "pages/history/history",
+    "pages/personal/personal"
+  ],
+  "window":{
+    "backgroundColor":"#F8F8F8",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "navigationBarTitleText": "似水流年小相册",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "position": "top",
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [{
+      "pagePath": "pages/home/home",
+      "text": "欢迎"
+    }, {
+      "pagePath": "pages/newAlbum/newAlbum",
+      "text": "新建相册"
+    }, {
+      "pagePath": "pages/albums/albums",
+      "text": "我的相册"
+    }, {
+      "pagePath": "pages/history/history",
+      "text": "我看过的"
+    }]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
+  },
+  "debug": false
+} 

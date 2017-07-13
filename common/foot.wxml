@@ -1,0 +1,9 @@
+<template name="foot">
+    <view class="weui-footer">
+        <view class="weui-footer__links">
+            <navigator url="../personal/personal" class="weui-footer__link">葛超🔍</navigator>
+        </view>
+        <view class="weui-footer__text">Copyright © 2017 葛超</view>
+        <view class="weui-footer__text">Made with ❤️ in Shenzhen</view>
+    </view>
+</template>

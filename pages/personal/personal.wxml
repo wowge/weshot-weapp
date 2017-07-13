@@ -1,0 +1,51 @@
+
+
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">
+            <text>关于我</text>
+        </view>
+    </view>
+
+    <view class="page__bd">
+        <view class="weui-cells">
+            <view class="cell">
+                <view class="weui-cell__bd">
+                    <view style="font-size: 18px;">
+                        <text>我的公众号：（搜索公众号"葛超的号"）</text>
+                    </view>
+                    <view class="weui-flex">
+                        <view bindtap="previewPhoto_qrcode">
+                            <image src="{{files[3].id}}" mode="aspectFit" style="width: 300rpx;height:300rpx;"/>
+                        </view>
+                    </view>
+
+                    <view style="font-size: 18px;">
+                        <text>似水流年小相册：</text>
+                    </view>
+                    <view class="weui-flex">
+                        <view bindtap="previewPhoto_weshot">
+                            <image src="{{files[4].id}}" mode="aspectFit" style="width: 300rpx;height:300rpx;"/>
+                        </view>
+                    </view>
+
+                    <view style="font-size: 18px;">
+                        <text>我的博客：</text>
+                    </view>
+                    <view>
+                        <text>{{files[5].id}}</text>
+                        <button bindtap="setClipboard" data-content="{{files[5].id}}" plain="true" class="weui-btn mini-btn" type="primary" size="mini">复制</button>
+                    </view>
+
+                    <view style="font-size: 18px;">
+                        <text>\n我的邮箱：</text>
+                    </view>
+                    <view>
+                        <text>{{files[6].id}}</text>
+                        <button bindtap="setClipboard" data-content="{{files[6].id}}" plain="true" class="weui-btn mini-btn" type="primary" size="mini">复制</button>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

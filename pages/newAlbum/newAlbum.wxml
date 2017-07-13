@@ -1,0 +1,53 @@
+<import src="../../common/foot.wxml" />
+
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">
+            <block wx:if="{{userInfo.nickName}}">
+                <text>每一张相片都藏着故事</text>
+            </block>
+            <block wx:else>
+                <button class="weui-btn" bindtap="authorizeUserInfo" type="primary">🔐授权用户信息</button>
+            </block>
+
+        </view>
+    </view>
+    <block wx:if="{{userInfo.nickName}}">
+        <view class="page__bd">
+            <view class="weui-cells">
+                <view class="cell">
+                    <view class="weui-cell__bd">
+                        <view class="weui-uploader">
+                            <view class="weui-uploader__hd">
+                                <view class="weui-uploader__title">上传相片
+                                    <view class="weui-uploader__info" wx:if="{{photos.length >0}}">{{photos.length}}张</view>
+                                    <view class="weui-uploader__info" wx:else>请选择相片 第一张相片将作为封面</view>
+                                </view>
+                            </view>
+
+                            <view class="weui-uploader__bd">
+                                <view class="weui-uploader__files" id="uploadFiles">
+                                    <block wx:for="{{photos}}" wx:key="*this">
+                                        <view class="weui-uploader__file" bindtap="previewPhoto" id="{{item}}">
+                                            <image class="weui-uploader__img" src="{{item}}" mode="aspectFit"></image>
+                                        </view>
+                                    </block>
+                                </view>
+
+                                <view class="weui-uploader__input-box">
+                                    <view class="weui-uploader__input" bindtap="choosePhotos"></view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="button-sp-area">
+                <button class="weui-btn" bindtap="gotoEditPhotos" type="primary">确定</button>
+                <button class="weui-btn" bindtap="clearPhotos" type="warn">清空相片</button>
+            </view>
+        </view>
+    </block>
+
+    <template is="foot" />
+</view>

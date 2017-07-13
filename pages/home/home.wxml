@@ -1,0 +1,56 @@
+<import src="../../common/foot.wxml" />
+
+<view class="page">
+    <view class="page__hd" style="background-image: url('{{files[0].id}}'); background-size: 100%;width: 600rpx;height: 300rpx;background-repeat: no-repeat;">
+        <view class="page__title" style="color: #fff5ee;">
+            <text>分享你的相片故事</text>
+        </view>
+    </view>
+
+    <view class="page__bd">
+        <block wx:if="{{files[2].id != ''}}">
+            <view class="weui-cells">
+                <view class="weui-cell__bd">
+                    <view style="text-align: center;font-size: 20px;font-weight: bolder;">
+                        <text>{{files[2].name}}\n</text>
+                    </view>
+                    <view style="text-align: left;font-size: 18px;">
+                        <text>{{files[2].id}}\n\n</text>
+                    </view>
+                </view>
+            </view>
+        </block>
+        <view class="weui-cells">
+            <view class="cell">
+                <view class="weui-cell__bd">
+                    <view style="text-align: center;font-size: 20px;font-weight: bolder;">
+                        <text>演示🎬\n</text>
+                        <video id="myVideo" src="{{files[1].id}}"></video>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+        <view class="weui-cells">
+            <view class="cell">
+                <view class="weui-cell__bd">
+                    <view style="text-align: center;font-size: 20px;font-weight: bolder;">
+                        <text>常见问题❓\n\n</text>
+                    </view>
+                </view>
+                <block wx:for="{{faq}}" wx:key="*this">
+                    <view style="text-align: left;font-size: 18px;">
+                        <text>{{index+1}}. {{item.name}}\n\n</text>
+                        <text>🖍{{item.id}}\n\n</text>
+                    </view>
+                </block>
+            </view>
+        </view>
+
+        <view class="button-sp-area">
+            <button class="weui-btn" open-type="share" type="primary">分享给好友</button>
+        </view>
+    </view>
+
+    <template is="foot" />
+</view>

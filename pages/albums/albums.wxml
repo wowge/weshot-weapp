@@ -1,0 +1,84 @@
+<import src="../../common/foot.wxml" />
+
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">
+            <block wx:if="{{userInfo.nickName}}">
+                <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+                <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}"></image>
+            </block>
+            <block wx:else>
+                <text class="userinfo-nickname">您还没有制作相册❗️</text>
+            </block>
+        </view>
+        <block wx:if="{{albumSum > 0}}">
+            <view class="page__desc">{{albumSum}} 本相册</view>
+        </block>
+    </view>
+    <block wx:if="{{userInfo.nickName}}">
+        <view class="page__bd">
+            <view class="weui-search-bar">
+                <view class="weui-search-bar__form">
+                    <view class="weui-search-bar__box">
+                        <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+
+                        <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" bindblur="inputTyping"/>
+
+                        <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+                            <icon type="clear" size="14"></icon>
+                        </view>
+
+                    </view>
+
+                    <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+                        <icon class="weui-icon-search" type="search" size="14"></icon>
+
+                        <view class="weui-search-bar__text" style="font-size: 18px;">搜索</view>
+
+                    </label>
+                </view>
+            </view>
+
+            <view style="font-size: 14px;text-align: center">
+                <text>
+                    支持按照相册名、制作时间搜索。\n时间格式：2017、2017-06、2017-06-01。\n新建相册如不显示请下拉刷新。
+                </text>
+            </view>
+
+            <block wx:for="{{albumsShowed}}" wx:key="*this">
+                <view class="weui-panel" style="margin:0;padding:0;">
+                    <view class="panel__hd">
+                        {{index + 1}}.  {{item.albumName}}
+                        <view class="page-body-button" bindtap="deleteAlbum" style="text-align: right;font-size:15px;color: #ff0000;" id="{{item.albumId}}" data-name="{{item.albumName}}">删除相册</view>
+                    </view>
+
+                    <view class="weui-panel__bd">
+                        <view class="weui-media-box weui-media-box_small-appmsg">
+                            <view class="weui-cells weui-cells_in-small-appmsg">
+                                <view class="weui-cell weui-cell_access">
+                                    <view class="weui-cell__hd" style="text-align: center;">
+                                        <block wx:if="{{coverBool[index]}}">
+                                            <image src="{{coverShowed[index] || null}}" style="width: 300rpx;height: 300rpx;margin-right: 5px" mode="aspectFit"/>
+                                        </block>
+                                        <block wx:else>
+                                            <button bindtap="showCover" data-index="{{index}}" plain="true" class="weui-btn mini-btn" type="primary" size="mini">显示封面</button>
+                                        </block>
+                                    </view>
+                                    <view class="weui-cell__bd weui-cell_primary">
+                                        <view style="font-size: 16px;">{{item.createOn}}</view>
+                                    </view>
+                                    <button bindtap="openAlbum" data-id="{{item.albumId}}" class="weui-btn mini-btn" type="primary" size="mini">进入</button>
+
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+
+                </view>
+            </block>
+
+        </view>
+    </block>
+
+    <template is="foot" />
+</view>
