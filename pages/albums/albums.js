@@ -70,7 +70,7 @@ var loadPage = (that) => {
                             let cover = res.data.downloadUrl;
                             that.cover[i] = cover;
                             that.setData({
-                                albumsShowed: that.albums
+                                albums: that.albums
                             });
                         })
                         .catch(err => {
@@ -91,21 +91,19 @@ Page({
     data: {
         userInfo: {},
         albumSum: 0,
-        coverShowed: [],
         coverBool: [],
-        albumsShowed: []
+        coverShowed: [],
+        albums: [],
+        hidden: []
     },
-    albums: [],
-    albumsShowed: [],
     cover: [],
-    coverFilter: [],
     coverBool: [],
     coverShowed: [],
+    hidden: [],
 
     onLoad: function () {
         var that = this;
         loadPage(that);
-        that.coverFilter = that.cover;
     },
 
     onShow: function () {
@@ -115,9 +113,12 @@ Page({
         var that = this;
         loadPage(that);
         that.setData({
-            coverBool: []
+            coverBool: [],
+            coverShowed: [],
+            hidden: []
         });
-        that.coverFilter = that.cover;
+        that.coverBool = [];
+        that.coverShowed = [];
         wx.stopPullDownRefresh();
     },
 
@@ -182,7 +183,7 @@ Page({
     showCover: function (e) {
         let index = e.currentTarget.dataset.index;
         this.coverBool[index] = true;
-        this.coverShowed[index] = this.coverFilter[index];
+        this.coverShowed[index] = this.cover[index];
         this.setData({
             coverShowed: this.coverShowed,
             coverBool: this.coverBool
@@ -212,12 +213,8 @@ Page({
     clearInput: function () {
         this.setData({
             inputVal: "",
-            albumsShowed: this.albums,
-            coverBool: []
+            hidden: []
         });
-        this.coverShowed = [];
-        this.coverBool = [];
-        this.coverFilter = this.cover;
     },
     inputTyping: function (e) {
         this.setData({
@@ -225,29 +222,21 @@ Page({
         });
         if (this.data.inputVal.trim() == ''){
             this.setData({
-                albumsShowed: this.albums,
-                coverBool: []
+                hidden: []
             });
-            this.coverShowed = [];
-            this.coverBool = [];
-            this.coverFilter = this.cover;
         }
         else {
-            this.setData({
-                albumsShowed: [],
-                coverBool: []
-            });
-            this.coverShowed = [];
-            this.coverBool = [];
-            this.albumsShowed = [];
-            this.coverFilter = [];
             for (let i = 0, len = this.albums.length; i < len; i++){
                 if (this.albums[i].albumName.includes(this.data.inputVal.trim()) || this.albums[i].createOn.includes(this.data.inputVal.trim())){
-                    this.albumsShowed.push(this.albums[i]);
+                    this.hidden[i] = false;
                     this.setData({
-                        albumsShowed: this.albumsShowed
+                        hidden: this.hidden
                     });
-                    this.coverFilter.push(this.cover[i]);
+                }else {
+                    this.hidden[i] = true;
+                    this.setData({
+                        hidden: this.hidden
+                    });
                 }
             }
         }

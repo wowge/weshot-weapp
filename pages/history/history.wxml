@@ -44,9 +44,9 @@
                 </text>
             </view>
 
-            <block wx:for="{{historyShowed}}" wx:key="*this">
+            <block wx:for="{{history}}" wx:key="*this">
 
-                    <view class="weui-panel" style="margin: 0;padding:0;">
+                    <view class="weui-panel" style="margin: 0;padding:0;" hidden="{{hidden[index]}}">
                         <view class="panel__hd">
                             {{index + 1}}.  {{item.albumName}}
                             <view class="page-body-button" bindtap="deleteHistory" style="text-align: right;font-size:15px;color: #ff0000;" id="{{item.albumId}}" data-name="{{item.albumName}}">清除记录</view>

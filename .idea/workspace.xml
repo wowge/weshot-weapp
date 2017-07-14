@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="370d7341-b3c8-462e-8a39-762a554c8b43" name="Default" comment="" />
+    <list default="true" id="370d7341-b3c8-462e-8a39-762a554c8b43" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/albums/albums.js" afterPath="$PROJECT_DIR$/pages/albums/albums.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/albums/albums.wxml" afterPath="$PROJECT_DIR$/pages/albums/albums.wxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/history/history.js" afterPath="$PROJECT_DIR$/pages/history/history.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/history/history.wxml" afterPath="$PROJECT_DIR$/pages/history/history.wxml" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -14,30 +19,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="albums.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pages/albums/albums.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3221">
-              <caret line="249" column="20" lean-forward="false" selection-start-line="249" selection-start-column="20" selection-end-line="249" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="albums.wxml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pages/albums/albums.wxml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-270">
-              <caret line="24" column="184" lean-forward="false" selection-start-line="24" selection-start-column="184" selection-end-line="24" selection-end-column="184" />
-              <folding>
-                <element signature="n#style#0;n#image#0;n#block#0;n#view#0;n#view#0;n#view#0;n#view#0;n#view#1;n#view#0;n#block#0;n#view#0;n#block#0;n#view#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -76,6 +58,9 @@
       <dir>$PROJECT_DIR$/images</dir>
     </dirStrings>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -93,11 +78,11 @@
         <option value="$PROJECT_DIR$/pages/viewAlbum/viewAlbum.wxml" />
         <option value="$PROJECT_DIR$/libs/qiniuUploader.js" />
         <option value="$PROJECT_DIR$/pages/home/home.js" />
+        <option value="$PROJECT_DIR$/pages/viewAlbum/viewAlbum.js" />
         <option value="$PROJECT_DIR$/pages/albums/albums.wxml" />
         <option value="$PROJECT_DIR$/pages/albums/albums.js" />
-        <option value="$PROJECT_DIR$/pages/viewAlbum/viewAlbum.js" />
-        <option value="$PROJECT_DIR$/pages/history/history.js" />
         <option value="$PROJECT_DIR$/pages/history/history.wxml" />
+        <option value="$PROJECT_DIR$/pages/history/history.js" />
       </list>
     </option>
   </component>
@@ -118,6 +103,7 @@
     <option name="width" value="1920" />
     <option name="height" value="1053" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -470,21 +456,20 @@
       <workItem from="1499228403326" duration="26879000" />
       <workItem from="1499517225844" duration="5858000" />
       <workItem from="1499555694764" duration="32004000" />
-      <workItem from="1499945353135" duration="4126000" />
+      <workItem from="1499945353135" duration="7669000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109740000" />
+    <option name="totallyTimeSpent" value="113283000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1053" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17571884" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17571884" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -860,39 +845,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pages/history/history.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="191" column="48" lean-forward="false" selection-start-line="191" selection-start-column="48" selection-end-line="191" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pages/history/history.wxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-299">
-          <caret line="24" column="182" lean-forward="false" selection-start-line="24" selection-start-column="182" selection-end-line="24" selection-end-column="182" />
+        <state relative-caret-position="122">
+          <caret line="48" column="100" lean-forward="false" selection-start-line="48" selection-start-column="100" selection-end-line="48" selection-end-column="100" />
           <folding>
             <element signature="n#style#0;n#image#0;n#block#0;n#view#0;n#view#0;n#view#0;n#view#0;n#view#1;n#view#0;n#block#0;n#view#0;n#block#0;n#view#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pages/albums/albums.wxml">
+    <entry file="file://$PROJECT_DIR$/pages/history/history.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-270">
-          <caret line="24" column="184" lean-forward="false" selection-start-line="24" selection-start-column="184" selection-end-line="24" selection-end-column="184" />
-          <folding>
-            <element signature="n#style#0;n#image#0;n#block#0;n#view#0;n#view#0;n#view#0;n#view#0;n#view#1;n#view#0;n#block#0;n#view#0;n#block#0;n#view#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="105">
+          <caret line="180" column="44" lean-forward="false" selection-start-line="180" selection-start-column="44" selection-end-line="180" selection-end-column="44" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pages/albums/albums.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3221">
-          <caret line="249" column="20" lean-forward="false" selection-start-line="249" selection-start-column="20" selection-end-line="249" selection-end-column="57" />
+        <state relative-caret-position="1118">
+          <caret line="238" column="23" lean-forward="true" selection-start-line="238" selection-start-column="23" selection-end-line="238" selection-end-column="23" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/albums/albums.wxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="48" column="95" lean-forward="false" selection-start-line="48" selection-start-column="69" selection-end-line="48" selection-end-column="95" />
+          <folding>
+            <element signature="n#style#0;n#image#0;n#block#0;n#view#0;n#view#0;n#view#0;n#view#0;n#view#1;n#view#0;n#block#0;n#view#0;n#block#0;n#view#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

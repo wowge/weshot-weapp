@@ -78,7 +78,7 @@ var loadPage = function (that) {
                             let cover = cover == '' ? '' : res.data.downloadUrl;
                             that.cover[i] = cover;
                             that.setData({
-                                historyShowed: that.history,
+                                history: that.history,
                             });
                         })
                         .catch(err => {
@@ -97,23 +97,22 @@ var loadPage = function (that) {
 Page({
     data: {
         userInfo: {},
-        historyShowed: [],
+        history: [],
         coverShowed: [],
         coverBool: [],
+        hidden: [],
         historySum: 0
     },
     history: [],
-    historyShowed: [],
     historyId: [],
     cover: [],
-    coverFilter: [],
     coverBool: [],
     coverShowed: [],
+    hidden: [],
 
     onLoad: function () {
         var that = this;
         loadPage(that);
-        that.coverFilter = that.cover;
     },
 
     onShow: function () {
@@ -179,7 +178,7 @@ Page({
     showCover: function (e) {
         let index = e.currentTarget.dataset.index;
         this.coverBool[index] = true;
-        this.coverShowed[index] = this.coverFilter[index];
+        this.coverShowed[index] = this.cover[index];
         this.setData({
             coverShowed: this.coverShowed,
             coverBool: this.coverBool
@@ -209,12 +208,8 @@ Page({
     clearInput: function () {
         this.setData({
             inputVal: "",
-            historyShowed: this.history,
-            coverBool: []
+            hidden: []
         });
-        this.coverShowed = [];
-        this.coverBool = [];
-        this.coverFilter = this.cover;
     },
     inputTyping: function (e) {
         this.setData({
@@ -222,28 +217,20 @@ Page({
         });
         if (this.data.inputVal.trim() == ''){
             this.setData({
-                historyShowed: this.history,
-                coverBool: []
+                hidden: []
             });
-            this.coverShowed = [];
-            this.coverBool = [];
-            this.coverFilter = this.cover;
         }else {
-            this.setData({
-                historyShowed: [],
-                coverBool: []
-            });
-            this.historyShowed = [];
-            this.coverBool = [];
-            this.albumsShowed = [];
-            this.coverFilter = [];
             for (let i = 0, len = this.history.length; i < len; i++){
                 if (this.history[i].albumName.includes(this.data.inputVal.trim()) || this.history[i].createOn.includes(this.data.inputVal.trim()) || this.history[i].authorNickName.includes(this.data.inputVal.trim())){
-                    this.historyShowed.push(this.history[i]);
+                    this.hidden[i] = false;
                     this.setData({
-                        historyShowed: this.historyShowed
+                        hidden: this.hidden
                     });
-                    this.coverFilter.push(this.cover[i]);
+                }else {
+                    this.hidden[i] = true;
+                    this.setData({
+                        hidden: this.hidden
+                    });
                 }
             }
         }
