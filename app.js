@@ -32,8 +32,8 @@ App({
     // 初始化七牛相关参数
     initQiniu: function() {
         var options = {
-            region: 'SCN', // 华南区
-            uptokenURL: 'https://weshot.wowge.org/api/uptoken',
+            region: '', // 七牛云地区码
+            uptokenURL: 'https://weshot.wowge.org/api/uptoken',  //七牛云上传凭据获取地址
             // uptoken: 'xxxx',
             domain: config.qiniuDomain
         };

@@ -21,6 +21,7 @@ var loadPage = function (that) {
     });
     app.getUserInfo(function (userInfo) {
         that.setData({
+            photos: wx.getStorageSync('photos') || [],
             userInfo: userInfo,
         });
         wx.hideLoading();

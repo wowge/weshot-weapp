@@ -40,7 +40,9 @@ var loadPage = function (that) {
                 }
             })
             .then(() => {
+                let flag = 0, count = 0;
                 for (let i = 0, len = that.data.userInfo.history.length; i < len; i++){
+                    count++;
                     that.historyId[i] = that.data.userInfo.history[i];
                     that.coverBool[i] = false;
                     qcloudPromisified({
@@ -54,18 +56,14 @@ var loadPage = function (that) {
                             let cover = res.data.photos ? res.data.photos[0] : '';
                             let albumName = res.data.albumName || '';
                             let createOn = res.data.createOn ? util.formatTime(new Date(res.data.createOn)) : '';
-                            let authorNickName = res.data.userInfo ? res.data.userInfo.nickName : '';
-                            let authorAvatarUrl = res.data.userInfo ? res.data.userInfo.avatarUrl : '';
+                            let authorId = res.data.userInfo ? res.data.userInfo.open_id : '';
 
-                            let historyItem = {
+                            that.historyItem[i] = {
                                 albumId: albumId,
-                                //cover: cover,
                                 albumName: albumName,
                                 createOn: createOn,
-                                authorNickName: authorNickName,
-                                authorAvatarUrl: authorAvatarUrl
+                                authorId: authorId
                             };
-                            that.history[i] = historyItem;
 
                             return requestPromisified({
                                 url: 'https://weshot.wowge.org/api/downloadUrl',
@@ -77,25 +75,39 @@ var loadPage = function (that) {
                         .then(res => {
                             let cover = cover == '' ? '' : res.data.downloadUrl;
                             that.cover[i] = cover;
+
+                            return qcloudPromisified({
+                                url: 'https://weshot.wowge.org/usr',
+                                data: {
+                                    id: that.historyItem[i].authorId
+                                }
+                            });
+                        })
+                        .then(res => {
+                            that.historyItem[i].authorNickName = res.data.nickName;
+                            that.historyItem[i].authorAvatarUrl = res.data.avatarUrl;
+                            that.history[i] = that.historyItem[i];
                             that.setData({
                                 history: that.history,
                             });
+                            flag++
+                            if (flag === count) {
+                              wx.hideLoading();
+                              that.setData({
+                                loaded: true
+                              })
+                            }
                         })
-                        .catch(err => {
-                            console.log(err);
-                        });
                 }
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
-            .finally(res => {
-                wx.hideLoading();
-            });
     });
 };
 Page({
     data: {
+        loaded: false,
         userInfo: {},
         history: [],
         coverShowed: [],
@@ -109,6 +121,7 @@ Page({
     coverBool: [],
     coverShowed: [],
     hidden: [],
+    historyItem: [],
 
     onLoad: function () {
         var that = this;
@@ -116,6 +129,19 @@ Page({
     },
 
     onShow: function () {
+    },
+
+    onPullDownRefresh: function () {
+      var that = this;
+      loadPage(that);
+      that.setData({
+        coverBool: [],
+        coverShowed: [],
+        hidden: []
+      });
+      that.coverBool = [];
+      that.coverShowed = [];
+      wx.stopPullDownRefresh();
     },
 
     deleteHistory: function (e) {
@@ -158,7 +184,7 @@ Page({
                             });
                         })
                         .catch(err => {
-                            console.log(err);
+                            //console.log(err);
                             wx.showToast({
                                 title: '清除失败！',
                                 icon: 'loading',

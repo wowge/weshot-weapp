@@ -22,7 +22,8 @@ function formatTime(date) {
   var second = date.getSeconds();
 
   //return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':');
-  return [year, month, day].map(formatNumber).join('-');
+  //return [year, month, day].map(formatNumber).join('-');
+    return year.toString() + '年' + month.toString() + '月' + day.toString() + '日';
 }
 
 function formatNumber(n) {

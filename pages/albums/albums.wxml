@@ -3,7 +3,7 @@
 <view class="page">
     <view class="page__hd">
         <view class="page__title">
-            <block wx:if="{{userInfo.nickName}}">
+            <block wx:if="{{userInfo.nickName && loaded}}">
                 <text class="userinfo-nickname">{{userInfo.nickName}}</text>
                 <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}"></image>
             </block>
@@ -15,7 +15,7 @@
             <view class="page__desc">{{albumSum}} 本相册</view>
         </block>
     </view>
-    <block wx:if="{{userInfo.nickName}}">
+    <block wx:if="{{userInfo.nickName && loaded}}">
         <view class="page__bd">
             <view class="weui-search-bar">
                 <view class="weui-search-bar__form">
@@ -41,13 +41,13 @@
 
             <view style="font-size: 14px;text-align: center">
                 <text>
-                    支持按照相册名、制作时间搜索。\n时间格式：2017、2017-06、2017-06-01。\n新建相册如不显示请下拉刷新。
+                    支持按照相册名、制作时间搜索。\n时间示例：2017年6月1日\n新建相册如不显示请下拉刷新。
                 </text>
             </view>
 
             <block wx:for="{{albums}}" wx:key="*this">
                 <view class="weui-panel" style="margin:0;padding:0;" hidden="{{hidden[index]}}">
-                    <view class="panel__hd">
+                    <view class="panel__hd" style="font-weight: bold;color: #000;">
                         {{index + 1}}.  {{item.albumName}}
                         <view class="page-body-button" bindtap="deleteAlbum" style="text-align: right;font-size:15px;color: #ff0000;" id="{{item.albumId}}" data-name="{{item.albumName}}">删除相册</view>
                     </view>

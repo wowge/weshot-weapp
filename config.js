@@ -2,7 +2,7 @@
  * 小程序配置文件
  */
 
-var host = "weshot.wowge.org";
+var host = "";  //服务器地址
 
 var config = {
 
@@ -12,8 +12,8 @@ var config = {
     // 登录地址，用于建立会话
     loginUrl: `https://${host}/login`,
     checkUrl: `https://${host}/user`,
-    qiniuDomain: `https://image.wowge.org`
-
+    qiniuDomain: ``,  //七牛云存储空间域名
+    webUrl: `https://${host}`
 };
 
 module.exports = config;

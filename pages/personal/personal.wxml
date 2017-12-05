@@ -20,14 +20,14 @@
                         </view>
                     </view>
 
-                    <view style="font-size: 18px;">
+                    <!--view style="font-size: 18px;">
                         <text>似水流年小相册：</text>
                     </view>
                     <view class="weui-flex">
                         <view bindtap="previewPhoto_weshot">
                             <image src="{{files[4].id}}" mode="aspectFit" style="width: 300rpx;height:300rpx;"/>
                         </view>
-                    </view>
+                    </view-->
 
                     <view style="font-size: 18px;">
                         <text>我的博客：</text>

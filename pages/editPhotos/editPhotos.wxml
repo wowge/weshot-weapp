@@ -26,7 +26,7 @@
                     </view>
 
                     <view class="weui-media-box weui-media-box_text">
-                        <view class="weui-media-box__title weui-media-box__title_in-text">🎵背景音乐
+                        <view class="weui-media-box__title weui-media-box__title_in-text">背景音乐
                             <view class="button-sp-area" style="text-align: center">
                                 <button bindtap="chooseMusic" class="weui-btn mini-btn" type="primary" size="mini">选择音乐</button>
                             </view>
@@ -42,22 +42,23 @@
                 <view class="weui-panel__hd">相片</view>
                 <view class="weui-panel__bd">
                     <block wx:for="{{photos}}" wx:key="*this">
-                        <view class="weui-media-box weui-media-box_appmsg">
-                            <view style="height: {{photosSize[index].width > photosSize[index].height ? 300*photosSize[index].height/photosSize[index].width : 300}}rpx;" class="weui-media-box__hd media-box__hd_in-appmsg" bindtap="previewPhoto" id="{{item}}">
-                                <image class="weui-media-box__thumb" src="{{item}}" mode="aspectFit" />
-                            </view>
-                            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                                <view class="weui-media-box__title media-box__title">{{index+1}}.</view>
-                                <view class="weui-media-box__desc">
-                                    <view class="weui-cells weui-cells_after-title">
-                                        <view class="weui-cell weui-cell_input">
-                                            <view class="weui-cell__bd">
-                                                <textarea class="cell__bd" placeholder="写下心情" auto-height data-index="{{index}}" value="{{feelings[index]}}" bindblur="setFeelings"/>
-                                            </view>
-                                        </view>
-                                    </view>
-                                </view>
-                            </view>
+                        <view>
+                            <textarea class="cell__bd" placeholder="写下心情" auto-height data-index="{{index}}" value="{{feelings[index]}}" bindblur="setFeelings"/>
+                        </view>
+
+                        <view bindtap="previewPhoto" id="{{item}}">
+                            <image src="{{item}}" mode="widthFix" />
+                        </view>
+
+                        <view class="weui-cell">
+                            <button bindtap="upPhoto" data-id="{{index}}" class="weui-btn mini-btn" type="primary" size="mini">上移</button>
+                            <button bindtap="downPhoto" data-id="{{index}}" class="weui-btn mini-btn" type="primary" size="mini">下移</button>
+                            <button bindtap="replacePhoto" data-id="{{index}}" class="weui-btn mini-btn" type="primary" size="mini">替换</button>
+                            <button bindtap="deletePhoto" data-id="{{index}}" class="weui-btn mini-btn" type="warn" size="mini">删除</button>
+                        </view>
+
+                        <view>
+                            <text>\n\n</text>
                         </view>
 
                     </block>
@@ -69,6 +70,10 @@
                 <button class="weui-btn" bindtap="clearText" type="warn">清空文字</button>
             </view>
         </form>
+    </view>
+
+    <view style="position: fixed;bottom: 1em;right: 0.5em;">
+        <button class="weui-btn" bindtap="choosePhotos" type="primary">添加相片</button>
     </view>
 
     <template is="foot" />

@@ -20,6 +20,12 @@ var showSuccess = text => wx.showToast({
     icon:'success'
 });
 
+var showBusy = text => wx.showToast({
+    title: text,
+    icon: 'loading',
+    duration: 1000
+});
+
 Page({
     data: {
         photos: [],
@@ -38,6 +44,7 @@ Page({
     },
     feelings: [],
     photosSize: [],
+    photos: [],
 
     /**
      * page onReady
@@ -58,7 +65,7 @@ Page({
     },
 
     /**
-     * restart the music when page onShow
+     * set music
      */
     onShow: function () {
         this.setData({
@@ -69,6 +76,10 @@ Page({
      * Get photos array when page onload
      */
     onLoad: function (option) {
+        wx.showLoading({
+            title: '正在读取中，稍等',
+        });
+
         var that = this;
         let photoNum;
         that.setData({
@@ -80,24 +91,10 @@ Page({
         if (!wx.getStorageSync('music')){
             wx.setStorageSync('music', this.data.music);
         }
+        that.photos = that.data.photos;
         that.feelings = wx.getStorageSync('feelings') || [];
 
-        photoNum = that.data.photos.length;
-        for (let i = 0, len = photoNum; i < len; i++){
-             wx.getImageInfo({
-               src: that.data.photos[i],
-                success: function (res) {
-                    that.photosSize[i] = {
-                        width: res.width,
-                        height: res.height,
-                    };
-                    that.setData({
-                        photosSize: that.photosSize,
-                    });
-                    wx.setStorageSync('photosSize', that.data.photosSize);
-                },
-              });
-        }
+        wx.hideLoading();
     },
 
     /**
@@ -171,61 +168,54 @@ Page({
     uploadAlbum: function () {
         var that = this;
         var photos = that.data.photos;
-        var albumId = '';
+        var photosPath = [];
+        for (let j = 0, len = photos.length; j < len; j++){
+          photosPath[j] = photos[j].split('//')[1];
+        }
 
         wx.showLoading({
             title: '正在上传',
         });
 
         app.initQiniu();
-        new Promise(function (resolve) {
-            resolve();
+        qcloudPromisified({
+          url: 'https://weshot.wowge.org/album/new',
+          data: {
+            albumName: that.data.albumName,
+            memory: that.data.memory,
+            photos: photosPath,
+            feelings: that.data.feelings,
+            music: that.data.music,
+            createOn: Date.now(),
+          },
+          method: 'POST'
         })
-            .then(() => {
-                for (let i = 0, len = photos.length; i < len; i++){
-                    qiniuUploadPromisified({
-                        filePath: photos[i],
-                    })
-                        .catch(err => {
-                            console.log(err);
-                        });
-                }
+        .then(() => {
+          let flag = 0, count =0;
+          for (let i = 0, len = photos.length; i < len; i++){
+            count++;
+            qiniuUploadPromisified({
+                filePath: photos[i],
             })
-            .then(() => {
-                for (let j = 0, len = photos.length; j < len; j++){
-                    photos[j] = photos[j].split('//')[1];
-                }
-                return qcloudPromisified({
-                    url: 'https://weshot.wowge.org/album/new',
-                    data: {
-                        albumName: that.data.albumName,
-                        memory: that.data.memory,
-                        photos: photos,
-                        feelings: that.data.feelings,
-                        music: that.data.music,
-                        createOn: Date.now(),
-                    },
-                    method: 'POST'
+              .then(res => {
+                wx.showToast({
+                  title: '第' + (i + 1) + '张完成上传',
+                  icon: 'loading',
+                  duration: 20000
                 })
-            })
-            .then(res => {
-                albumId = res.data._id;
-            })
-            .catch(err => {
-                console.log(err);
-            })
-            .finally(res => {
-                wx.removeStorageSync('photos');
-                wx.removeStorageSync('feelings');
-                wx.removeStorageSync('albumName');
-                wx.removeStorageSync('memory');
-                wx.removeStorageSync('music');
-                wx.removeStorageSync('photosSize');
-                wx.hideLoading();
-                wx.switchTab({
+                flag++;
+                if (flag === count) {
+                  wx.hideLoading();
+                  wx.switchTab({
                     url: '../albums/albums'
-                });
-            });
+                  });
+                }
+              })
+          }
+        })
+        .catch(err => {
+          //console.log(err);
+        })
     },
 
     /**
@@ -246,5 +236,166 @@ Page({
             this.audioCtx.play();
             this.musicPlay = true;
         }
-    }
+    },
+
+    /**
+     * Photo item operation
+     */
+    upPhoto: function (e) {
+        let i = e.currentTarget.dataset.id;
+        if(i == 0){
+            showBusy('已经到顶了！');
+            return;
+        }
+        let prePhoto = this.data.photos[i - 1];
+        let preFeeling = this.data.feelings[i - 1];
+        let prePhotoSize = this.photosSize[i - 1];
+        this.photos = this.data.photos;
+        this.photos[i - 1] = this.photos[i];
+        this.photos[i] = prePhoto;
+        this.feelings[i - 1] = this.feelings[i];
+        this.feelings[i] = preFeeling;
+        this.photosSize[i - 1] = this.photosSize[i];
+        this.photosSize[i] = prePhotoSize;
+
+        this.setData({
+            photos: this.photos
+        });
+        wx.setStorageSync('photos', this.data.photos);
+        this.setData({
+            feelings: this.feelings
+        });
+        wx.setStorageSync('feelings', this.data.feelings);
+        this.setData({
+            photosSize: this.photosSize
+        });
+        wx.setStorageSync('photosSize', this.data.photosSize);
+    },
+
+    downPhoto: function (e) {
+        let i = e.currentTarget.dataset.id;
+        if(i == this.data.photos.length - 1){
+            showBusy('已经到底了！');
+            return;
+        }
+        let curPhoto = this.data.photos[i];
+        let curFeeling = this.data.feelings[i];
+        let curPhotoSize = this.photosSize[i];
+        this.photos = this.data.photos;
+        this.photos[i] = this.photos[i + 1];
+        this.photos[i + 1] = curPhoto;
+        this.feelings[i] = this.feelings[i + 1];
+        this.feelings[i + 1] = curFeeling;
+        this.photosSize[i] = this.photosSize[i + 1];
+        this.photosSize[i + 1] = curPhotoSize;
+
+        this.setData({
+            photos: this.photos
+        });
+        wx.setStorageSync('photos', this.data.photos);
+        this.setData({
+            feelings: this.feelings
+        });
+        wx.setStorageSync('feelings', this.data.feelings);
+        this.setData({
+            photosSize: this.photosSize
+        });
+        wx.setStorageSync('photosSize', this.data.photosSize);
+    },
+
+    replacePhoto: function (e) {
+        let i = e.currentTarget.dataset.id;
+        var that = this;
+        wx.chooseImage({
+            count: 1,
+            sizeType: ['compressed'],
+            success: res => {
+                that.photos[i] = res.tempFilePaths[0];
+                that.setData({
+                    photos: that.photos
+                });
+                wx.setStorageSync('photos', that.data.photos);
+
+                wx.getImageInfo({
+                    src: that.photos[i],
+                    success: function (res) {
+                        that.photosSize[i] = {
+                            width: res.width,
+                            height: res.height,
+                        };
+                        that.setData({
+                            photosSize: that.photosSize,
+                        });
+                        wx.setStorageSync('photosSize', that.data.photosSize);
+                    },
+                });
+            }
+        });
+    },
+
+    deletePhoto: function (e) {
+        let i = e.currentTarget.dataset.id;
+        var that = this;
+        wx.showModal({
+            title: '确定删除相片 ' + (i + 1) + ' 吗？',
+            content: '确定删除相片 ' + (i + 1) + '"' + (that.feelings[i] || '') + '"' + ' 吗？',
+            confirmText: '确定',
+            confirmColor: '#ff0000',
+            cancelColor: '#3CC51F',
+            success: res => {
+                if (res.confirm){
+                    that.photos.splice(i, 1);
+                    that.photosSize.splice(i, 1);
+                    that.feelings.splice(i, 1);
+
+                    this.setData({
+                        photos: this.photos
+                    });
+                    wx.setStorageSync('photos', this.data.photos);
+                    this.setData({
+                        feelings: this.feelings
+                    });
+                    wx.setStorageSync('feelings', this.data.feelings);
+                    this.setData({
+                        photosSize: this.photosSize
+                    });
+                    wx.setStorageSync('photosSize', this.data.photosSize);
+                }else if (res.cancel){
+                    return;
+                }
+            }
+        });
+    },
+
+    choosePhotos: function (e) {
+        var that = this;
+        wx.chooseImage({
+            count: 10,
+            sizeType: ['compressed'],
+            success: res => {
+                let prePhotosLen = that.data.photos.length;
+                that.photos = that.photos.concat(res.tempFilePaths);
+                that.setData({
+                    photos: that.photos
+                });
+                wx.setStorageSync('photos', that.photos);
+
+                for (let i = prePhotosLen, len = that.data.photos.length; i < len; i++){
+                    wx.getImageInfo({
+                        src: that.data.photos[i],
+                        success: function (res) {
+                            that.photosSize[i] = {
+                                width: res.width,
+                                height: res.height,
+                            };
+                            that.setData({
+                                photosSize: that.photosSize,
+                            });
+                            wx.setStorageSync('photosSize', that.photosSize);
+                        },
+                    });
+                }
+            }
+        });
+    },
 });

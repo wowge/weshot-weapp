@@ -3,17 +3,17 @@
 <view class="page">
     <view class="page__hd">
         <view class="page__title">
-            <block wx:if="{{me.nickName}}">
+            <block wx:if="{{me.nickName && loaded}}">
                 <image src="{{photos[0] || null}}" style="height: {{photosSize[0].width > photosSize[0].height ? 600*photosSize[0].height/photosSize[0].width : 600}}rpx;width: 600rpx;" mode="aspectFit"/>
                 <text>\n{{albumName}}</text>
             </block>
             <block wx:else>
-                <button class="weui-btn" bindtap="authorizeUserInfo" type="primary">🔐授权用户信息</button>
+                <button class="weui-btn" bindtap="authorizeUserInfo" type="primary">授权用户公开信息</button>
             </block>
         </view>
     </view>
 
-    <block wx:if="{{me.nickName}}">
+    <block wx:if="{{me.nickName && loaded}}">
         <view class="weui-media-box weui-media-box_text">
             <view class="weui-media-box__desc" bindtap="controlMusic">
                 <audio poster="{{music.poster}}" name="{{music.name}}" author="{{music.authors}}" src="{{music.src}}" id="myAudio" controls loop></audio>
@@ -21,13 +21,12 @@
         </view>
 
         <view class="page__bd">
-            <view class="weui-panel">
+            <!--view class="weui-panel">
                 <view class="page-section">
-                    <view class="weui-cells__title">🦋请选择样式</view>
                     <view class="weui-cells weui-cells_after-title">
                         <view class="weui-cell weui-cell_input">
                             <view class="weui-cell__hd">
-                                <view class="weui-label">当前选择</view>
+                                <view class="weui-label">请选择</view>
                             </view>
                             <view class="weui-cell__bd">
                                 <picker bindchange="bindPickerChange" value="{{styleIndex}}" range="{{style}}">
@@ -38,61 +37,47 @@
                         </view>
                     </view>
                 </view>
-            </view>
+            </view-->
 
-            <view hidden="{{!styleChecked[0]}}">
+            <!--view hidden="{{!styleChecked[0]}}">
                 <view class="weui-panel" style="font-size: 18px">
                     <view class="page-section-title">
                         <text>播放速度</text>
                     </view>
                     <view style="text-align: center;">
                         <text>{{intervalText}}</text>
-                        <slider bindchange="intervalChange" value="{{interval}}" min="1000" max="5000" step="1000"/>
+                        <slider bindchange="intervalChange" value="{{interval}}" min="2000" max="10000"/>
                     </view>
                 </view>
                 <view class="weui-panel">
-                    <swiper autoplay="{{autoplay}}" interval="{{interval}}" duration="500" style="height: {{swiperHeight}}rpx;width: 720rpx;margin: 15rpx;" circular bindchange="photoChanged">
+                    <view style="text-align: left;font-size: 18px; font-weight: bolder;"><text>（{{photoIndex+1}}/{{photoNum}}）  {{feeling}} </text></view>
+                    <swiper autoplay="{{autoplay}}" interval="{{interval}}" duration="500" style="width: 750rpx; height: 1000rpx;" circular bindchange="photoChanged">
                         <block wx:for="{{photos}}" wx:key="*this">
                             <view bindtap="previewPhoto" id="{{item}}" >
                                 <swiper-item >
-                                    <image src="{{item}}" mode="aspectFit" style="height: {{photosSize[index].width > photosSize[index].height ? 720*photosSize[index].height/photosSize[index].width : 720}}rpx;width: 720rpx;"/>
+                                    <image src="{{item}}" mode="widthFix" style=""/>
                                 </swiper-item>
                             </view>
                         </block>
                     </swiper>
-                    <view style="text-align: left;font-size: 18px; font-weight: bolder;color: {{randomColor}};font-style: italic;">（{{photoIndex+1}}/{{photoNum}}）  {{feeling}}</view>
                 </view>
-            </view>
+            </view-->
 
-            <view hidden="{{!styleChecked[1]}}">
+            <view>
                 <view class="weui-panel">
-                    <view class="weui-flex">
-                        <block wx:for="{{photos}}" wx:key="*this">
-
-                            <view class="weui-media-box weui-media-box_appmsg" style="padding: 5px;">
-                                <view style="height: {{photosSize[index].width > photosSize[index].height ? 300*photosSize[index].height/photosSize[index].width : 300}}rpx;" class="weui-media-box__hd media-box__hd_in-appmsg" bindtap="previewPhoto" id="{{item}}">
-                                    <image class="weui-media-box__thumb" src="{{item}}" mode="aspectFit" />
-                                </view>
-                                <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                                    <view class="weui-media-box__title media-box__title">{{index+1}}.</view>
-                                    <view class="weui-media-box__desc">
-                                        <view class="weui-cells weui-cells_after-title">
-                                            <view class="weui-cell weui-cell_input" style="padding:0;">
-                                                <view class="weui-cell__bd">
-                                                    <view style="color: #000;text-align: left;font-size: 18px; font-weight: bolder;font-style: italic;">{{feelings[index] || ''}}</view>
-                                                </view>
-                                            </view>
-                                        </view>
-                                    </view>
-                                </view>
-                            </view>
-
-                        </block>
-                    </view>
+                    <block wx:for="{{photos}}" wx:key="*this">
+                        <view style="color: #000;text-align: left;font-size: 18px; font-weight: bolder;"><text>{{feelings[index] || ''}}</text></view>
+                        <view bindtap="previewPhoto" id="{{item}}">
+                            <image src="{{item}}" mode="widthFix" />
+                        </view>
+                        <view>
+                            <text>\n</text>
+                        </view>
+                    </block>
                 </view>
             </view>
 
-            <view hidden="{{!styleChecked[2]}}">
+            <!--view hidden="{{!styleChecked[2]}}">
                 <view class="weui-panel">
                     <view class="weui-flex" style="justify-content: start;align-content: start;">
                         <block wx:for="{{photos}}" wx:key="*this">
@@ -103,12 +88,12 @@
                         </block>
                     </view>
                 </view>
-            </view>
+            </view-->
 
             <view class="weui-panel">
                 <view class="weui-article__section">
-                    <view class="weui-article__p" style="font-size: 18px;text-align: left;color: #000000;margin: 1em;font-style: oblique;font-weight: bolder;">
-                        {{memory}}
+                    <view class="weui-article__p" style="font-size: 18px;text-align: left;color: #000000;margin: 1em;font-weight: bolder;">
+                        <text>{{memory}}</text>
                         <view style="text-align: right;">
                             <text class="userinfo-nickname">{{userInfo.nickName}}</text>
                             <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}"></image>
@@ -119,7 +104,7 @@
             </view>
         </view>
 
-        <view style="position: fixed;top: 50%;right: 0.5em;">
+        <!--view style="position: fixed;top: 50%;right: 0.5em;">
             <block wx:if="{{playing === true}}">
                 <view bindtap="controlMusic">
                     <image src="/images/pause.png" style="width: 48px;height: 48px;"/>
@@ -130,7 +115,7 @@
                     <image src="/images/play.png" style="width: 48px;height: 48px;"/>
                 </view>
             </block>
-        </view>
+        </view-->
 
         <view style="position: fixed;bottom: 1em;right: 0.5em;">
             <button class="weui-btn" open-type="share" type="primary">分享</button>
@@ -141,11 +126,11 @@
         </view-->
     </block>
 
-    <view style="position: fixed;top: 0em;left: 0.5em;">
+    <!--view style="position: fixed;top: 0em;left: 0.5em;">
         <navigator open-type="switchTab" url="/pages/home/home">
             <image src="/images/weshot.png" style="width: 60px;height: 60px;"/>
         </navigator>
-    </view>
+    </view-->
 
     <template is="foot" />
 </view>

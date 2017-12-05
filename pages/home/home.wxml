@@ -2,9 +2,6 @@
 
 <view class="page">
     <view class="page__hd" style="background-image: url('{{files[0].id}}'); background-size: 100%;width: 600rpx;height: 300rpx;background-repeat: no-repeat;">
-        <view class="page__title" style="color: #fff5ee;">
-            <text>分享你的相片故事</text>
-        </view>
     </view>
 
     <view class="page__bd">
@@ -20,28 +17,46 @@
                 </view>
             </view>
         </block>
-        <view class="weui-cells">
-            <view class="cell">
-                <view class="weui-cell__bd">
-                    <view style="text-align: center;font-size: 20px;font-weight: bolder;">
-                        <text>演示🎬\n</text>
-                        <video id="myVideo" src="{{files[1].id}}"></video>
+
+        <view style="font-size: 16px; text-align: center;">
+            <text>
+                网页版小相册网址：{{webUrl}}
+            </text>
+            <button bindtap="setClipboard" data-content="{{webUrl}}" plain="true" class="weui-btn mini-btn" type="primary" size="mini">复制</button>
+            <text>
+                网页版用户名：{{nickName}}
+            </text>
+            <button bindtap="setClipboard" data-content="{{nickName}}" plain="true" class="weui-btn mini-btn" type="primary" size="mini">复制</button>
+            <text>
+                网页版密码：{{password}}
+            </text>
+            <button bindtap="setClipboard" data-content="{{password}}" plain="true" class="weui-btn mini-btn" type="primary" size="mini">复制</button>
+        </view>
+
+        <block wx:if="{{files[1].id != ''}}">
+            <view class="weui-cells">
+                <view class="cell">
+                    <view class="weui-cell__bd">
+                        <view style="text-align: center;font-size: 20px;font-weight: bolder;">
+                            <text>{{files[1].name}}\n</text>
+                            <video id="myVideo" src="{{files[1].id}}"></video>
+                        </view>
                     </view>
                 </view>
             </view>
-        </view>
+        </block>
 
         <view class="weui-cells">
             <view class="cell">
                 <view class="weui-cell__bd">
                     <view style="text-align: center;font-size: 20px;font-weight: bolder;">
-                        <text>常见问题❓\n\n</text>
+                        <text>常见问题?\n\n</text>
                     </view>
                 </view>
                 <block wx:for="{{faq}}" wx:key="*this">
                     <view style="text-align: left;font-size: 18px;">
                         <text>{{index+1}}. {{item.name}}\n\n</text>
-                        <text>🖍{{item.id}}\n\n</text>
+                        <text>"{{item.id}}"\n\n</text>
                     </view>
                 </block>
             </view>

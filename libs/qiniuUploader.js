@@ -69,7 +69,7 @@ function upload(obj) {
                 doUpload(obj.filePath, obj.success, obj.fail, obj.options);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             });
     } else if (config.qiniuUploadTokenFunction) {
         config.qiniuUploadToken = config.qiniuUploadTokenFunction();
@@ -107,7 +107,7 @@ function doUpload(filePath, success, fail, options) {
             }
         })
         .catch(err => {
-            console.log(err);
+            //console.log(err);
         });
 }
 

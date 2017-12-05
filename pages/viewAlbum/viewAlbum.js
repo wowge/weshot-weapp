@@ -1,12 +1,9 @@
 const util = require('../../utils/util');
 var qcloud = require('../../bower_components/wafer-client-sdk/index');
-const qiniuUploader = require('../../libs/qiniuUploader');
 var app = getApp();
 
 var qcloudPromisified = util.wxPromisify(qcloud.request);
 var requestPromisified = util.wxPromisify(wx.request);
-var downloadPromisified = util.wxPromisify(wx.downloadFile);
-var getImageInfoPromisified = util.wxPromisify(wx.getImageInfo);
 var showModalPromisified = util.wxPromisify(wx.showModal);
 var saveImageToPhotosAlbumPromisified = util.wxPromisify(wx.saveImageToPhotosAlbum);
 
@@ -18,8 +15,107 @@ var showFail = (title, content) => {
     });
 };
 
+var loadPage = (that, option) => {
+    wx.showLoading({
+        title: '正在读取中，稍等',
+    });
+
+    var that = that;
+    var option = option;
+    that.albumId = option.id;
+
+    app.getUserInfo(function (userInfo) {
+        that.setData({
+            me: userInfo,
+        });
+
+        qcloudPromisified({
+            login: true,
+            url: 'https://weshot.wowge.org/albumDetail',
+            data: {
+                id: option.id,
+            }
+        })
+            .then(res => {
+                that.photos = res.data.photos;
+                that.albumName = res.data.albumName;
+                that.memory = res.data.memory;
+                that.feelings = res.data.feelings;
+                that.music = res.data.music;
+                that.userInfo = res.data.userInfo;
+                that.createOn = util.formatTime(new Date(res.data.createOn));
+                that.photoNum = that.photos ? that.photos.length : 0;
+                return requestPromisified({
+                  url: 'https://weshot.wowge.org/api/get/song/qq',
+                  data: {
+                    id: that.music.id
+                  }
+                });
+            })
+            .then(res => {
+              that.music.src = res.data.url;
+
+              return qcloudPromisified({
+                url: 'https://weshot.wowge.org/usr',
+                data: {
+                  id: that.userInfo.open_id
+                }
+              });
+            })
+            .then(res => {
+              that.userInfo.nickName = res.data.nickName;
+              that.userInfo.avatarUrl = res.data.avatarUrl;
+              that.setData({
+                albumId: that.albumId,
+                albumName: that.albumName || '',
+                memory: that.memory || '',
+                feelings: that.feelings || [],
+                music: that.music,
+                userInfo: that.userInfo,
+                createOn: that.createOn,
+                feeling: that.feelings[0] || '',
+                photoNum: that.photoNum,
+              });
+
+              that.audioCtx = wx.createAudioContext("myAudio");
+              that.audioCtx.play();
+            })
+            .then(() => {
+                let flag = 0;
+                let count = 0;
+                for (let i = 0, len = that.photoNum; i < len; i++){
+                    count++;
+                    requestPromisified({
+                        url: 'https://weshot.wowge.org/api/downloadUrl',
+                        data: {
+                            key: that.photos[i],
+                        }
+                    })
+                        .then(res => {
+                            that.photos[i] = res.data.downloadUrl;
+                            that.setData({
+                                photos: that.photos
+                            });
+                          flag++;
+                          if (flag === count) {
+                            wx.hideLoading();
+                            that.setData({
+                              loaded: true
+                            })
+                          }
+                        })
+                }
+            })
+            .catch(err => {
+                //console.log(err);
+                showFail('读取失败！', err);
+            });
+    });
+};
+
 Page({
     data: {
+        loaded: false,
         albumId: '',
         photos: [],
         albumName: '',
@@ -35,127 +131,30 @@ Page({
         photoNum: 0,
         photosSize: [],
         swiperHeight: 720,
-        style: ['幻灯片', '图文', '照片墙'],
+        style: ['幻灯片', '图文'],
         styleIndex: 0,
-        styleChecked: [true, false, false],
+        styleChecked: [true, false],
         playing: true,
         me: {},
-        interval: 3000,
-        intervalText: '中'
+        interval: 6000,
+        intervalText: '稍快'
     },
     photosSize: [],
     albumId: '',
 
     onLoad: function (option) {
-        wx.showLoading({
-            title: '正在读取中，稍等',
-        });
-
         var that = this;
-        that.albumId = option.id;
-
-        app.getUserInfo(function (userInfo) {
-            that.setData({
-                me: userInfo,
-            });
-
-            qcloudPromisified({
-                login: true,
-                url: 'https://weshot.wowge.org/albumDetail',
-                data: {
-                    id: option.id,
-                }
-            })
-                .then(res => {
-                    that.photos = res.data.photos;
-                    that.albumName = res.data.albumName;
-                    that.memory = res.data.memory;
-                    that.feelings = res.data.feelings;
-                    that.music = res.data.music;
-                    that.userInfo = res.data.userInfo;
-                    that.createOn = util.formatTime(new Date(res.data.createOn));
-                    that.photoNum = that.photos ? that.photos.length : 0;
-                })
-                .then(() => {
-                    for (let i = 0, len = that.photoNum; i < len; i++){
-                        requestPromisified({
-                            url: 'https://weshot.wowge.org/api/downloadUrl',
-                            data: {
-                                key: that.photos[i],
-                            }
-                        })
-                            .then(res => {
-                                var url = res.data.downloadUrl;
-                                return downloadPromisified({
-                                    url: url
-                                });
-                            })
-                            .then(res => {
-                                that.photos[i] = res.tempFilePath;
-                                that.setData({
-                                    photos: that.photos
-                                });
-                                return getImageInfoPromisified({
-                                    src: that.photos[i]
-                                });
-                            })
-                            .then(res => {
-                                that.photosSize[i] = {
-                                    width: res.width,
-                                    height: res.height,
-                                };
-                                that.setData({
-                                    photosSize: that.photosSize,
-                                });
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            });
-                    }
-                })
-                .then(() => {
-                    return requestPromisified({
-                        url: 'https://weshot.wowge.org/api/get/song/qq',
-                        data: {
-                            id: that.music.id
-                        }
-                    });
-                })
-                .then(res => {
-                    that.music.src = res.data.url;
-                    that.setData({
-                        albumId: that.albumId,
-                        albumName: that.albumName || '',
-                        memory: that.memory || '',
-                        feelings: that.feelings || [],
-                        music: that.music,
-                        userInfo: that.userInfo,
-                        createOn: that.createOn,
-                        feeling: that.feelings[0] || '',
-                        photoNum: that.photoNum,
-                    });
-                })
-                .catch(err => {
-                    console.log(err);
-                    showFail('读取失败！', err);
-                })
-                .finally(res => {
-                    wx.hideLoading();
-                });
-        });
+        that.option = option;
+        loadPage(that, that.option);
     },
 
     /**
      * page onReady
      */
     onReady: function () {
-        var that = this;
-        that.audioCtx = wx.createAudioContext("myAudio");
-        setTimeout(function () {
-            that.audioCtx.play();
-        }, 3000);
-    },
 
+    },
+    
     onHide: function () {
         if (this.data.playing === true){
             this.audioCtx.pause();
@@ -208,9 +207,7 @@ Page({
         this.setData({
             feeling: this.data.feelings[index] || '',
             photoIndex: index,
-            swiperHeight: this.data.photosSize[index].width > this.data.photosSize[index].height ? 720*this.data.photosSize[index].height/this.data.photosSize[index].width : 720,
         });
-        this.getRandomColor();
     },
 
     bindPickerChange: function (e) {
@@ -255,32 +252,22 @@ Page({
         this.setData({
             interval: e.detail.value
         });
-        switch (this.data.interval){
-            case 1000:
-                this.setData({
-                    intervalText: '极快'
-                });
-                break;
-            case 2000:
-                this.setData({
-                    intervalText: '快'
-                });
-                break;
-            case 3000:
-                this.setData({
-                    intervalText: '中'
-                });
-                break;
-            case 4000:
-                this.setData({
-                    intervalText: '慢'
-                });
-                break;
-            case 5000:
-                this.setData({
-                    intervalText: '极慢'
-                });
-                break;
+        if (e.detail.value <= 4000){
+            this.setData({
+                intervalText: '快'
+            });
+        }else if (e.detail.value <= 6000){
+            this.setData({
+                intervalText: '稍快'
+            });
+        }else if (e.detail.value <= 8000){
+            this.setData({
+                intervalText: '稍慢'
+            });
+        }else if (e.detail.value <= 10000){
+            this.setData({
+                intervalText: '慢'
+            });
         }
     },
 
@@ -300,7 +287,7 @@ Page({
 
     onShareAppMessage: function (res) {
         return {
-            title: this.data.albumName + '  ' +this.data.userInfo.nickName + '的小相册',
+            title: this.data.albumName,
             path: '/pages/viewAlbum/viewAlbum?id=' + this.data.albumId
         };
     },
@@ -326,12 +313,12 @@ Page({
                         filePath: that.data.photos[i]
                     })
                         .catch(err => {
-                            console.log(err);
+                            //console.log(err);
                         });
                 }
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
             .finally(res => {
                 wx.hideLoading();

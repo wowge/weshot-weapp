@@ -62,7 +62,7 @@ qcloud.request({
         console.log(response);
     },
     fail: function (err) {
-        console.log(err);
+        //console.log(err);
     }
 });
 ```
@@ -79,7 +79,7 @@ qcloud.request({
         console.log(response);
     },
     fail: function (err) {
-        console.log(err);
+        //console.log(err);
     }
 });
 ```

@@ -7,7 +7,7 @@
                 <text>每一张相片都藏着故事</text>
             </block>
             <block wx:else>
-                <button class="weui-btn" bindtap="authorizeUserInfo" type="primary">🔐授权用户信息</button>
+                <button class="weui-btn" bindtap="authorizeUserInfo" type="primary">授权用户公开信息</button>
             </block>
 
         </view>

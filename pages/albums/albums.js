@@ -5,6 +5,11 @@ var app = getApp();
 var qcloudPromisified = util.wxPromisify(qcloud.request);
 var requestPromisified = util.wxPromisify(wx.request);
 
+var showSuccess = text => wx.showToast({
+  title: text,
+  icon:'success'
+});
+
 var loadPage = (that) => {
     wx.showLoading({
         title: '稍等片刻',
@@ -39,7 +44,9 @@ var loadPage = (that) => {
                 }
             })
             .then(() => {
+                let flag =0, count = 0;
                 for (let i = 0, len = that.data.userInfo.albums.length; i < len; i++){
+                    count++;
                     qcloudPromisified({
                         url: 'https://weshot.wowge.org/albumBrief',
                         data: {
@@ -72,23 +79,25 @@ var loadPage = (that) => {
                             that.setData({
                                 albums: that.albums
                             });
+                            flag++;
+                            if (flag === count) {
+                              wx.hideLoading();
+                              that.setData({
+                                loaded: true
+                              })
+                            }
                         })
-                        .catch(err => {
-                            console.log(err);
-                        });
                 }
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
-            .finally(res => {
-                wx.hideLoading();
-            });
     });
 };
 
 Page({
     data: {
+        loaded: false,
         userInfo: {},
         albumSum: 0,
         coverBool: [],
@@ -163,7 +172,7 @@ Page({
                         });
                     })
                     .catch(err => {
-                        console.log(err);
+                        //console.log(err);
                         wx.showToast({
                             title: '删除失败！',
                             icon: 'loading',
@@ -241,4 +250,5 @@ Page({
             }
         }
     },
+
 });

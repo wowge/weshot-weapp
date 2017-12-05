@@ -46,7 +46,7 @@ Page({
                 });
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             });
     },
     /**
@@ -100,7 +100,7 @@ Page({
                 }
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             });
     },
 
@@ -231,12 +231,12 @@ Page({
                                 });
                             })
                             .catch(err => {
-                                console.log(err);
+                                //console.log(err);
                             });
                     }
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                     showFail('读取失败！', '请重试');
                 })
                 .finally(res => {
