@@ -2,7 +2,7 @@
 
 ## 注意事项
 
-- config.js中的七牛云存储空间域名需要同后端代码一致。
+- config.js中的七牛云存储空间域名需要同后端[weshot-server](https://github.com/wowge/weshot-server)代码一致。
 
 ## 致谢
 
